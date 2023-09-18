@@ -17,6 +17,7 @@ public class HttpServerModule extends ReactContextBaseJavaModule implements Life
 
     private static int port;
     private static Server server = null;
+    private static int listeners = 0;
 
     public HttpServerModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -65,6 +66,20 @@ public class HttpServerModule extends ReactContextBaseJavaModule implements Life
     @Override
     public void onHostDestroy() {
         stopServer();
+    }
+
+    
+    @ReactMethod
+    public void addListener(String eventName) {
+        listeners += 1;
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        listeners -= count;
+        if(listeners == 0) {
+            stopServer();
+        }
     }
 
     private void startServer() {
